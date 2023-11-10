@@ -1,86 +1,83 @@
 <template>
-    <section class="content">
-        <div class="main">
-            
-            <div class="table-content">
-                <table class="table table-hover table-striped-columns demo">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h3 class="text-center text-dark mt-2">Usuarios</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card-header">
+                    Adicionar registro
+                </div>
+                <div class="card-body">
+                    <form @submit.prevent="save">
+
+                        <div class="form-group">
+                            <label>Usuario nome</label>
+                            <input type="text" v-model="usuarios.nome" class="form-control" placeholder="nome">
+
+                        </div>
+                        <div class="form-group">
+                            <label>Usuario e-mail</label>
+                            <input type="text" v-model="usuarios.email" class="form-control" placeholder="e-mail">
+
+                        </div>
+
+                        <div class="form-group">
+                            <label>Senha</label>
+                            <input type="text" v-model="usuarios.senha" class="form-control" placeholder="Password">
+
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h2>Lista de Usuarios</h2>
+                <table class="table table-dark">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Verificado</th>
-                            <th scope="col">Data de Criação</th>
-                            <th scope="col">Data de Atualização</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">E-mail</th>
+                            <th scope="col">Senha</th>
                         </tr>
-                        </thead>
-
+                    </thead>
                     <tbody>
-                        <tr v-for="item in usuarios" :key="item.id">
-                        <td scope="row">{{ item.id }}</td>
-                        <td scope="row">{{ item.usuario }}</td>
-                        <td scope="row">{{ item.email }}</td>
-                        <td scope="row">{{ item.verificado }}</td>
-                        <td scope="row">{{ item.created_at }}</td>
-                        <td scope="row">{{ item.updated_at }}</td>
+                        <tr v-for="usuario in usuarios" v-bind:key="usuario.id">
+
+                            <td>{{ usuario.id }}</td>
+                            <td>{{ usuario.nome }}</td>
+                            <td>{{ usuario.email }}</td>
+                            <td>{{ usuario.senha }}</td>
                             <td>
-                                <button @click="editarUsuario(item.id)" class="btn btn-info">Editar</button>
-                                <button @click="excluirUsuario(item.id)" class="btn btn-danger">Excluir</button>
+                                <button type="button" class="btn btn-warning" @click="edit(usuario)">Edit</button>
+                                <button type="button" class="btn btn-danger" @click="remove(usuario)">Delete</button>
                             </td>
                         </tr>
+
                     </tbody>
                 </table>
             </div>
-            <!--Criar Usuario-->
-            <!-- Botão para criar novo usuário -->
-            <button @click="toggleForm" class="btn btn-success">Criar Usuário</button>
-
-            <!-- Formulário para adicionar novo usuário (inicialmente oculto) -->
-            <div v-if="mostrarForm">
-            <h2>Novo Usuário</h2>
-            <form @submit.prevent="criarUsuario">
-                <!-- Campos do formulário para adicionar usuário -->
-                <label for="novoNome">Nome:</label>
-                <input v-model="novoUsuario.usuario" type="text" id="novoNome" required>
-
-                <label for="novoEmail">Email:</label>
-                <input v-model="novoUsuario.email" type="email" id="novoEmail" required>
-
-                <!-- Adicione mais campos conforme necessário -->
-
-                <button type="submit" class="btn btn-primary">Salvar</button>
-            </form>
-            </div>
-            <!--Editar Usuario -->
-            <!-- Formulário de edição -->
-            <div v-if="usuarioSelecionado" class="form">
-            <h2>Editar Usuário</h2>
-            <form @submit.prevent="salvarEdicao">
-                <!-- Campos do formulário para edição -->
-                <label for="editNome">Nome:</label>
-                <input v-model="usuarioSelecionado.usuario" type="text" id="editNome" required>
-
-                <label for="editEmail">Email:</label>
-                <input v-model="usuarioSelecionado.email" type="email" id="editEmail" required>
-
-                <!-- Adicione mais campos conforme necessário -->
-
-                <button type="submit" class="btn btn-primary">Salvar Edição</button>
-                <button @click="cancelarEdicao" class="btn btn-secondary">Cancelar</button>
-            </form>
-            </div>
-
+        </div>
     </div>
-        
-    </section>
 </template>
 <script>
+import axios from 'axios';
 import Usuario from '../services/usuarios';
 export default {
 
 data() {
     return {
         usuarios: [],
+        usuario: {
+            id: '',
+            nome: '',
+            email: '',
+            senha: ''
+        }
     };
 },
 
@@ -90,6 +87,24 @@ data() {
             this.usuarios = res.data;
         })
     },
+    save() {
+        if (this.usuarios.id == '')
+        {
+            this.saveData();
+        }
+        else
+        {
+            this.updateData();
+        }
+    },
+    saveData() {
+        Usuario.post().then(
+            ({ data }) => {
+                alert("Salvo!");
+                this.usuario
+            }
+        )
+    }
     
 }
 </script>

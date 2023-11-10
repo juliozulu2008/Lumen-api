@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <div class="info">
-            <h1>Julio.C.Dias</h1>
+            
             <h1>Front Aplication</h1>
         </div>
         <div class="nav">
