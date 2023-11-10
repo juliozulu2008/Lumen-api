@@ -17,7 +17,7 @@ use Illuminate\Http\Request; // clase responsavel pelas informaçoes passadas no
 */
 
 $router->get('/', function () use ($router) {
-    return "Api de Julio Cesar dias Dos Santos";
+    return "Api de Julio Cesar Dias Dos Santos";
 });
 
 $router->get('/usuarios', 'UsuarioController@index');
